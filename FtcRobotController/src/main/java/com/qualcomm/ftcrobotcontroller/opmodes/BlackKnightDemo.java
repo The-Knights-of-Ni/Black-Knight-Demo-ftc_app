@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.util.Range;
  * Auxiliary Controller (controller2):
  * - Lift (Right Joystick)
  * - Launcher + Intake (Y)
- * - Intake Reverse (X)
+ * - Intake Reverse Toggle (X)
  * - Launcher Unjam (B)
  * - Goal Lock (L Bumper (up), L Trigger (down)
  * - Face ( R Bumper (open), R Trigger (close))
@@ -75,8 +75,10 @@ public class BlackKnightDemo extends LinearOpMode
         intake = hardwareMap.dcMotor.get("intake");
         goal = hardwareMap.servo.get("goal");
         face = hardwareMap.servo.get("face");
+
         launcher.setDirection(DcMotor.Direction.REVERSE);
-        right_drive.setDirection(DcMotor.Direction.REVERSE); // check this in testing
+        right_drive.setDirection(DcMotor.Direction.REVERSE);
+        launcher.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         waitForStart();
 
@@ -93,9 +95,9 @@ public class BlackKnightDemo extends LinearOpMode
         float launcherPause = 0f;
         float unjamTime = 0f;
 
-        float dEncoderTicks;
-        float newNumEncoderTicks;
-        float oldNumEncoderTicks = 0f;
+        int dEncoderTicks;
+        int newNumEncoderTicks;
+        int oldNumEncoderTicks = 0;
 
 
         while(true) {
@@ -140,7 +142,7 @@ public class BlackKnightDemo extends LinearOpMode
                 launching = !launching;
             }
 
-            if(toggleIntake) {
+            if(toggleIntake) { //cycles through 0, 1, -1, 0, 1, -1
                 if(intaking<1) {
                     intaking++;
                 }
@@ -155,15 +157,16 @@ public class BlackKnightDemo extends LinearOpMode
             old_time = new_time;
 
             if(launching) {
-                newNumEncoderTicks = launcher.getCurrentPosition(); //get new value for launcher encoder ticks
+                //encoder updater for launcher unjam
+                newNumEncoderTicks = launcher.getCurrentPosition();
                 dEncoderTicks = newNumEncoderTicks - oldNumEncoderTicks;
                 oldNumEncoderTicks = newNumEncoderTicks;
 
-                if(intaking==0) {//if intake is not running and we are launching, run forward
+                if(intaking==0) {//if intake is not running and we are launching, run intake
                     intaking = 1;
                 }
 
-
+                //
                 if(dEncoderTicks < MIN_ENCODER_TICKS && dEncoderTicks >= 0) {
                     launcherPause += dt;
                 }
