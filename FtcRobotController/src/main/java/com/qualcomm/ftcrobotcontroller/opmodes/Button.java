@@ -128,10 +128,8 @@ public class Button //Might want to extend gamepad instead of passing to it late
      */
     public void updateButtons(byte[] joystick) //TODO: Add lookup method that checks if currentByte == sum of a button combination and then makes it 0 if needed.
     {
-        ByteBuffer stick = ByteBuffer.allocate(45);
-        stick.put(joystick);
         previousByte = currentByte;
-        currentByte = stick.getInt(offset);
+        currentByte = ByteBuffer.wrap(joystick, 42, 4).getInt();
     }
 
 

@@ -21,10 +21,11 @@ import com.qualcomm.robotcore.util.Range;
  *
  * Auxiliary Controller (controller2):
  * - Lift (Right Joystick)
- * - Launcher + Intake (R Trigger)
- * - Intake Reverse (R Bumper)
- * - Goal Lock (L Bumper (up), L Trigger (down))
- * - Face (X (close), Y (open))
+ * - Launcher + Intake (Y)
+ * - Intake Reverse (X)
+ * - Launcher Unjam (B)
+ * - Goal Lock (L Bumper (up), L Trigger (down)
+ * - Face ( R Bumper (open), R Trigger (close))
  *
  * Created March 19, 2016
  *
@@ -42,9 +43,9 @@ public class BlackKnightDemo extends LinearOpMode
     Servo face;
     //Motor Powers and Locations
     public static final float GOAL_CLOSED = 0.0f; // bash this
-    public static final float GOAL_OPEN = 1.0f; // bash this
+    public static final float GOAL_OPEN = 0.5f; // bash this
     public static final float FACE_CLOSED = 0.0f; // bash this
-    public static final float FACE_OPEN = 1.0f; // bash this
+    public static final float FACE_OPEN = 0.25f; // bash this
     public static final float INTAKE_FORWARD_POWER = 0.75f; // bash this (I think this means 75% power?)
     public static final float INTAKE_REVERSE_POWER = -0.5f; // bash (can we have negative power to reverse?)
     public static final float LAUNCHER_FORWARD_POWER = 0.90f; // bash
@@ -74,6 +75,7 @@ public class BlackKnightDemo extends LinearOpMode
         intake = hardwareMap.dcMotor.get("intake");
         goal = hardwareMap.servo.get("goal");
         face = hardwareMap.servo.get("face");
+        launcher.setDirection(DcMotor.Direction.REVERSE);
         right_drive.setDirection(DcMotor.Direction.REVERSE); // check this in testing
 
         waitForStart();
@@ -103,21 +105,22 @@ public class BlackKnightDemo extends LinearOpMode
             float[] drive_stick = new float[]{-gamepad1.left_stick_x, -gamepad1.left_stick_y};
 
             // launcher
-            boolean toggleLauncher = gamepad2.right_trigger>0.0;
+            boolean toggleLauncher = controller2.press(Button.Buttons.Y);
+            boolean unjam = controller2.press(Button.Buttons.B);
 
             // intake
-            boolean toggleIntake = controller2.press(Button.Buttons.RIGHT_BUMPER);
+            boolean toggleIntake = controller2.press(Button.Buttons.X);
 
             // lift
             float lift_power = Range.clip(gamepad2.right_stick_y, -1, 1);
 
             // goal
             boolean goalOpen = controller2.press(Button.Buttons.LEFT_BUMPER);
-            boolean goalClosed = gamepad2.left_trigger>0.0;
+            boolean goalClosed = gamepad2.left_trigger>0.5;
 
             // face
-            boolean faceOpen = controller2.press(Button.Buttons.Y);
-            boolean faceClosed = controller2.press(Button.Buttons.X);
+            boolean faceOpen = controller2.press(Button.Buttons.RIGHT_BUMPER);
+            boolean faceClosed = gamepad2.right_trigger>0.5;
 
             //================================Drive===============================
             deadZone(drive_stick);
@@ -168,7 +171,7 @@ public class BlackKnightDemo extends LinearOpMode
                     launcherPause = 0;
                 }
 
-                if(launcherPause>=UNJAM_WAIT){
+                if(unjam || launcherPause>=UNJAM_WAIT){
                     launcherPause = 0;
                     unjamTime = UNJAM_TOTAL_TIME; //refills time for unjamming
                 }
