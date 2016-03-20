@@ -44,10 +44,10 @@ public class BlackKnightDemo extends LinearOpMode
     //Motor Powers and Locations
     public static final float GOAL_CLOSED = 0.0f; // bash this
     public static final float GOAL_OPEN = 0.4f; // bash this
-    public static final float FACE_CLOSED = 0.0f; // bash this
-    public static final float FACE_OPEN = 0.2f; // bash this
+    public static final float FACE_CLOSED = 0.07f; // bash this
+    public static final float FACE_OPEN = 0.175f; // bash this
     public static final float INTAKE_FORWARD_POWER = 0.5f; // bash this (I think this means 75% power?)
-    public static final float INTAKE_REVERSE_POWER = -0.4f; // bash (can we have negative power to reverse?)
+    public static final float INTAKE_REVERSE_POWER = -0.5f; // bash (can we have negative power to reverse?)
     public static final float LAUNCHER_FORWARD_POWER = 0.90f; // bash
     public static final float LAUNCHER_REVERSE_POWER = -0.75f; // bash
 
@@ -178,7 +178,7 @@ public class BlackKnightDemo extends LinearOpMode
                 if (unjamTime > 0)	{
                     intaking = 0;
                     launcher.setPower(LAUNCHER_REVERSE_POWER);
-                    unjamTime -= dt;
+                    unjamTime -= (dt+75);
                 }
                 else {
                     launcher.setPower(LAUNCHER_FORWARD_POWER);
