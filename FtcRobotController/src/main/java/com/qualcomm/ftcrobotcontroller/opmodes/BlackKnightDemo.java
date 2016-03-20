@@ -43,9 +43,9 @@ public class BlackKnightDemo extends LinearOpMode
     Servo face;
     //Motor Powers and Locations
     public static final float GOAL_CLOSED = 0.0f; // bash this
-    public static final float GOAL_OPEN = 0.5f; // bash this
+    public static final float GOAL_OPEN = 0.4f; // bash this
     public static final float FACE_CLOSED = 0.0f; // bash this
-    public static final float FACE_OPEN = 0.25f; // bash this
+    public static final float FACE_OPEN = 0.2f; // bash this
     public static final float INTAKE_FORWARD_POWER = 0.75f; // bash this (I think this means 75% power?)
     public static final float INTAKE_REVERSE_POWER = -0.5f; // bash (can we have negative power to reverse?)
     public static final float LAUNCHER_FORWARD_POWER = 0.90f; // bash
@@ -111,7 +111,7 @@ public class BlackKnightDemo extends LinearOpMode
             boolean unjam = controller2.press(Button.Buttons.B);
 
             // intake
-            boolean toggleIntake = controller2.press(Button.Buttons.X);
+            boolean reverseIntake = controller2.press(Button.Buttons.X);
 
             // lift
             float lift_power = Range.clip(gamepad2.right_stick_y, -1, 1);
@@ -132,8 +132,8 @@ public class BlackKnightDemo extends LinearOpMode
             right_power = Range.clip(qBezier(right_power), -1, 1);
             left_power = Range.clip(qBezier(left_power), -1, 1);
 
-            right_drive.setPower(right_power);
-            left_drive.setPower(left_power);
+            right_drive.setPower(right_power*0.6); //scale down 60%
+            left_drive.setPower(left_power*0.6);
 
 
             //============================Launcher + Intake========================
@@ -142,13 +142,11 @@ public class BlackKnightDemo extends LinearOpMode
                 launching = !launching;
             }
 
-            if(toggleIntake) { //cycles through 0, 1, -1, 0, 1, -1
-                if(intaking<1) {
-                    intaking++;
-                }
-                else {
-                    intaking = -1;
-                }
+            if(reverseIntake) { //if X is pressed, run intake backwards
+                intaking = -1;
+            }
+            else {
+                intaking = 0;
             }
 
             //timer updater for launcher unjam
@@ -187,8 +185,6 @@ public class BlackKnightDemo extends LinearOpMode
                 else {
                     launcher.setPower(LAUNCHER_FORWARD_POWER);
                 }
-                //run launcher
-
             }
 
             // Run intake based on intaking state
