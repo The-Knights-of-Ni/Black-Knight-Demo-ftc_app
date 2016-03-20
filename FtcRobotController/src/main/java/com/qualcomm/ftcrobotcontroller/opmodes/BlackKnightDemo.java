@@ -21,11 +21,11 @@ import com.qualcomm.robotcore.util.Range;
  *
  * Auxiliary Controller (controller2):
  * - Lift (Right Joystick)
- * - Launcher + Intake (Y)
- * - Intake Reverse Toggle (X)
- * - Launcher Unjam (B)
- * - Goal Lock (L Bumper (up), L Trigger (down)
- * - Face ( R Bumper (open), R Trigger (close))
+ * - Launcher + Intake (toggle Y to turn on/off)
+ * - Intake Reverse Toggle (hold X to reverse)
+ * - Launcher Unjam (press B for one cycle)
+ * - Goal Lock (L Bumper (up), L Trigger (down))
+ * - Face (R Bumper (open), R Trigger (close))
  *
  * Created March 19, 2016
  *
@@ -47,7 +47,7 @@ public class BlackKnightDemo extends LinearOpMode
     public static final float FACE_CLOSED = 0.07f; // bash this
     public static final float FACE_OPEN = 0.175f; // bash this
     public static final float INTAKE_FORWARD_POWER = 0.5f; // bash this (I think this means 75% power?)
-    public static final float INTAKE_REVERSE_POWER = -0.5f; // bash (can we have negative power to reverse?)
+    public static final float INTAKE_REVERSE_POWER = -0.6f; // bash (can we have negative power to reverse?)
     public static final float LAUNCHER_FORWARD_POWER = 0.90f; // bash
     public static final float LAUNCHER_REVERSE_POWER = -0.75f; // bash
 
