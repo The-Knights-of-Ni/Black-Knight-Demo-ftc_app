@@ -42,8 +42,8 @@ public class BlackKnightDemo extends LinearOpMode
     Servo goal;
     Servo face;
     //Motor Powers and Locations
-    public static final float GOAL_CLOSED = 0.0f; // bash this
-    public static final float GOAL_OPEN = 0.4f; // bash this
+    public static final float GOAL_CLOSED = 0.2f; // bash this
+    public static final float GOAL_OPEN = 1f; // bash this
     public static final float FACE_CLOSED = 0.07f; // bash this
     public static final float FACE_OPEN = 0.175f; // bash this
     public static final float INTAKE_FORWARD_POWER = 0.5f; // bash this (I think this means 75% power?)
@@ -130,8 +130,8 @@ public class BlackKnightDemo extends LinearOpMode
             float left_power  = drive_stick[1]-drive_stick[0];
             float right_power = drive_stick[1]+drive_stick[0];
 
-            right_power = Range.clip(qBezier(right_power), -1, 1);
-            left_power = Range.clip(qBezier(left_power), -1, 1);
+            right_power = Range.clip(right_power, -1, 1);
+            left_power = Range.clip(left_power, -1, 1);
 
             right_drive.setPower(right_power*0.6); //scale down 60%
             left_drive.setPower(left_power*0.6);
